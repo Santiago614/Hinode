@@ -1,7 +1,7 @@
 <?php
 require 'dao/conexion.php';
 //Consulta para mostrar los productos
-$sqlProducto = "SELECT PR.nombreProducto,PR.descripcionProducto,PR.precioProducto,CA.nombreCategoria 
+$sqlProducto = "SELECT PR.nombreProducto,PR.imagenProducto,PR.descripcionProducto,PR.precioProducto,CA.nombreCategoria 
 FROM tblcategoria as CA 
 INNER JOIN tblproducto as PR ON CA.idCategoria=PR.categoriaProducto";
 $consultaProducto = $pdo->prepare($sqlProducto);
@@ -16,7 +16,7 @@ $resultadoCategoria = $consultaCategoria->fetchAll();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -142,7 +142,7 @@ $resultadoCategoria = $consultaCategoria->fetchAll();
         <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
           <?php foreach ($resultadoProducto as $datos) { ?>
             <div class="col-lg-6 menu-item filter-<?php echo $datos['nombreCategoria']; ?>">
-              <img src="assets/img/menu/lobster-bisque.jpg" class="menu-img" alt="">
+              <img src="assets/img/<?php echo $datos['imagenProducto']; ?>" class="menu-img" alt="">
               <div class="menu-content">
                 <a href="#"><?php echo $datos['nombreProducto']; ?></a><span>$<?php echo number_format($datos['precioProducto'], 0, '', '.'); ?></span>
               </div>
