@@ -9,7 +9,7 @@ if (isset($_SESSION['correo'])) {
   $resultadoCategoria = $consultaCategoria->fetchAll();
 
   //Consulr el id del usuario logueado
-  $sqlDocumento = "SELECT documentoIdentidad FROM tblusuario WHERE correoUsuario=:correo";
+  $sqlDocumento = "SELECT nombresUsuario,apellidosUsuario,documentoIdentidad FROM tblusuario WHERE correoUsuario=:correo";
   $consultaDocumento = $pdo->prepare($sqlDocumento);
   $consultaDocumento->bindValue(":correo", $_SESSION['correo']);
   $consultaDocumento->execute();
@@ -33,7 +33,7 @@ if (isset($_SESSION['correo'])) {
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>HINODE - Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
@@ -41,6 +41,7 @@ if (isset($_SESSION['correo'])) {
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="../assets/img/faviconHinode.png" rel="icon">
   </head>
 
   <body id="page-top">
@@ -53,7 +54,7 @@ if (isset($_SESSION['correo'])) {
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
           </div>
-          <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+          <div class="sidebar-brand-text mx-3">Edición Productos </div>
         </a>
 
         <!-- Divider -->
@@ -106,7 +107,7 @@ if (isset($_SESSION['correo'])) {
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultadoDocumento['nombresUsuario']." ".$resultadoDocumento['apellidosUsuario']; ?></span>
                   <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
                 </a>
                 <!-- Dropdown - User Information -->
@@ -128,84 +129,155 @@ if (isset($_SESSION['correo'])) {
               <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
             </div>
 
-            <!-- Formulario y tabla -->
-            <div class="cont-form-crearPubli">
-              <div class="card">
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col-8">
-                      <h3 class="mb-0">Agregar Producto</h3>
+            <!-- Formulario para registrar productos-->
+            <?php if (@!$_POST['idProducto']) { ?>
+              <div class="cont-form-crearPubli">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col-8">
+                        <h3 class="mb-0">Agregar Producto</h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="card-body form-crearPubli">
-                  <form action="../controller/crearProducto.php" method="POST" enctype="multipart/form-data">
-                    <h6 class="heading-small text-muted mb-4">
-                      ¡Cuéntale a la gente lo que quieres ofrecer!
-                    </h6>
-                    <div class="pl-lg-4">
-                      <div class="row">
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-username">Título</label>
-                            <input type="text" id="input-username" name="nombre" class="form-control" placeholder="Nombre Producto" value="" required />
+                  <div class="card-body form-crearPubli">
+                    <form action="../controller/crearProducto.php" method="POST" enctype="multipart/form-data">
+                      <h6 class="heading-small text-muted mb-4">
+                        ¡Cuéntale a la gente lo que quieres ofrecer!
+                      </h6>
+                      <div class="pl-lg-4">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Título</label>
+                              <input type="text" id="input-username" name="nombre" class="form-control" placeholder="Nombre Producto" value="" required />
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-username">Descripción</label>
-                            <input type="text" id="input-username" name="descripcion" class="form-control" placeholder="Descripción" maxlength="5000" value="" required />
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Descripción</label>
+                              <input type="text" id="input-username" name="descripcion" class="form-control" placeholder="Descripción" maxlength="5000" value="" required />
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-username">Costo</label>
-                            <input type="number" id="input-username" name="costo" class="form-control" placeholder="Costo" max="999999999" value="" required />
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Costo</label>
+                              <input type="number" id="input-username" name="costo" class="form-control" placeholder="Costo" max="999999999" value="" required />
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-email">Categoria</label>
-                            <select name="categoria" class="form-control" required>
-                              <option value="" disabled selected>
-                                Seleccione una categoria del producto
-                              </option>
-                              <?php
-                              foreach ($resultadoCategoria as $datosCategoria) { ?>
-                                <option value="<?php echo $datosCategoria['idCategoria']; ?>">
-                                  <?php echo $datosCategoria['nombreCategoria']; ?>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-email">Categoria</label>
+                              <select name="categoria" class="form-control" required>
+                                <option value="" disabled selected>
+                                  Seleccione una categoria del producto
                                 </option>
-                              <?php } ?>
-                            </select>
+                                <?php
+                                foreach ($resultadoCategoria as $datosCategoria) { ?>
+                                  <option value="<?php echo $datosCategoria['idCategoria']; ?>">
+                                    <?php echo $datosCategoria['nombreCategoria']; ?>
+                                  </option>
+                                <?php } ?>
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-username">Imagen</label>
-                            <input type="file" id="input-username" name="imagen" id="file" class="form-control-file" multiple accept="image/x-png,image/jpeg" required />
-                            <div class="description">
-                              <!-- <br>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Imagen</label>
+                              <input type="file" id="input-username" name="imagen" id="file" class="form-control-file" accept="image/x-png,image/jpeg" required />
+                              <div class="description">
+                                <!-- <br>
                                         limite de 2048MB por imágenes -->
-                              <br />
-                              Tipos permitidos: jpeg, png, jpg
+                                <br />
+                                Tipos permitidos: jpeg, png, jpg
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <input type="hidden" id="usu" name="usuario" class="form-control" placeholder="Usuario" value="<?php echo $resultadoDocumento['documentoIdentidad']; ?>" />
                             </div>
                           </div>
                         </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <input type="hidden" id="usu" name="usuario" class="form-control" placeholder="Usuario" value="<?php echo $resultadoDocumento['documentoIdentidad']; ?>" />
-                          </div>
-                        </div>
+                        <button class="btn btn-primary btn-xs" type="submit" name="subir">
+                          Publicar
+                        </button>
                       </div>
-                      <button class="btn btn-primary btn-xs" type="submit" name="subir">
-                        Publicar
-                      </button>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- Fin formulario y tabla -->
+            <?php } else {
+              $idProducto = $_POST['idProducto'];
+              $sqlMostrarProducto = "SELECT PR.idProducto,PR.nombreProducto,PR.descripcionProducto,PR.precioProducto,CA.idCategoria,CA.nombreCategoria 
+              FROM tblproducto as PR 
+              INNER JOIN tblcategoria as CA ON CA.idCategoria=PR.categoriaProducto
+              WHERE PR.idProducto=:idProducto";
+              $consultaMostrarProducto = $pdo->prepare($sqlMostrarProducto);
+              $consultaMostrarProducto->bindValue(":idProducto", $idProducto);
+              $consultaMostrarProducto->execute();
+              $resultadoMostrarProducto=$consultaMostrarProducto->fetch();
+            ?>
+              <div class="cont-form-crearPubli">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col-8">
+                        <h3 class="mb-0">Editar Producto</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body form-crearPubli">
+                    <form action="../controller/actualizarProducto.php" method="POST">
+                      <h6 class="heading-small text-muted mb-4">
+                        ¡Haz las actualizaciones de tu producto!
+                      </h6>
+                      <div class="pl-lg-4">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Título</label>
+                              <input type="text" id="input-username" name="nombre" class="form-control" placeholder="Nombre Producto" value="<?php echo $resultadoMostrarProducto['nombreProducto']; ?>" required />
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Descripción</label>
+                              <input type="text" id="input-username" name="descripcion" class="form-control" placeholder="Descripción" maxlength="5000" value="<?php echo $resultadoMostrarProducto['descripcionProducto']; ?>" required />
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-username">Costo</label>
+                              <input type="number" id="input-username" name="costo" class="form-control" placeholder="Costo" max="999999999" value="<?php echo $resultadoMostrarProducto['precioProducto'] ?>" required />
+                            </div>
+                          </div>
+                          <input type="hidden" name="idProducto" value="<?php echo $resultadoMostrarProducto['idProducto']; ?>">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label class="form-control-label" for="input-email">Categoria</label>
+                              <select name="categoria" class="form-control" required>
+                                <option value="<?php echo $resultadoMostrarProducto['idCategoria']; ?>"><?php echo $resultadoMostrarProducto['nombreCategoria']; ?></option>
+                                <?php
+                                foreach ($resultadoCategoria as $datosCategoria) { ?>
+                                  <option value="<?php echo $datosCategoria['idCategoria']; ?>">
+                                    <?php echo $datosCategoria['nombreCategoria']; ?>
+                                  </option>
+                                <?php } ?>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <button class="btn btn-primary btn-xs" type="submit" name="subir">
+                          Editar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            <?php } ?>
+            <!-- Fin formulario -->
             <br><br>
             <!-- Tabla de productos -->
             <!-- DataTales Example -->
@@ -230,13 +302,23 @@ if (isset($_SESSION['correo'])) {
                     <tbody>
                       <?php foreach ($resultadoProducto as $datosProducto) { ?>
                         <tr>
-                          <td><?php echo $datosProducto['imagenProducto'] ?></td>
+                          <td><img src="../assets/img/<?php echo $datosProducto['imagenProducto'] ?>" alt="" width="80px"></td>
                           <td><?php echo $datosProducto['nombreProducto'] ?></td>
                           <td><?php echo $datosProducto['descripcionProducto'] ?></td>
-                          <td><?php echo $datosProducto['precioProducto'] ?></td>
+                          <td><?php echo number_format($datosProducto['precioProducto'], 0, '', '.') ?></td>
                           <td><?php echo $datosProducto['nombreCategoria'] ?></td>
-                          <td><a href="actualizar?id=<?php echo $datosProducto['idProducto'] ?>" class="btn btn-success">Actualizar</a></td>
-                          <td><a href="eliminar?id=<?php echo $datosProducto['idProducto'] ?>" class="btn btn-danger">Eliminar</a></td>
+                          <td>
+                            <form action="index.php" method="post">
+                              <input type="hidden" name="idProducto" value="<?php echo $datosProducto['idProducto'] ?>">
+                              <input type="submit" class="btn btn-success" value="Editar">
+                            </form>
+                          </td>
+                          <td>
+                            <form action="../controller/eliminarProducto.php" method="post">
+                              <input type="hidden" name="idProducto" value="<?php echo $datosProducto['idProducto'] ?>">
+                              <input type="submit" class="btn btn-danger" value="Eliminar">
+                            </form>
+                          </td>
                         </tr>
                       <?php } ?>
                     </tbody>
@@ -286,7 +368,7 @@ if (isset($_SESSION['correo'])) {
             <button class="btn btn-secondary" type="button" data-dismiss="modal">
               Cancelar
             </button>
-            <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
+            <a class="btn btn-primary" href="../controller/cerrarSesion.php">Cerrar Sesión</a>
           </div>
         </div>
       </div>

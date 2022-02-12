@@ -77,7 +77,9 @@ $resultadoCategoria = $consultaCategoria->fetchAll();
         <div class="col-lg-8">
           <h1>Bienvenidos a <span>Tu tienda virtual HINODE</span></h1>
           <h2>Aquí encontrarás todos los productos que estás solicitando</h2>
+          <h3>Si quieres adquirir alguno de estos productos por favor contactenos a través del número: +57 3177595055</h3>
 
+          <a href="https://api.whatsapp.com/send?phone=573177595055" target="_black"><img src="assets/img/whatsapp.svg" class="iconoWhatsapp" alt=""></a>
         </div>
 
       </div>
@@ -144,14 +146,14 @@ $resultadoCategoria = $consultaCategoria->fetchAll();
             <div class="col-lg-6 menu-item filter-<?php echo $datos['nombreCategoria']; ?>">
               <img src="assets/img/<?php echo $datos['imagenProducto']; ?>" class="menu-img" alt="">
               <div class="menu-content">
-                <a href="#"><?php echo $datos['nombreProducto']; ?></a><span>$<?php echo number_format($datos['precioProducto'], 0, '', '.'); ?></span>
+                <a><?php echo $datos['nombreProducto']; ?></a><span>$<?php echo number_format($datos['precioProducto'], 0, '', '.'); ?></span>
               </div>
               <div class="menu-ingredients">
                 <?php echo $datos['descripcionProducto']; ?>
               </div>
             </div>
+          <?php } ?>
         </div>
-      <?php } ?>
       </div>
     </section><!-- End Menu Section -->
   </main><!-- End #main -->
