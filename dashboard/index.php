@@ -7,14 +7,22 @@ if (isset($_SESSION['correo'])) {
   $consultaCategoria = $pdo->prepare($sqlCategoria);
   $consultaCategoria->execute();
   $resultadoCategoria = $consultaCategoria->fetchAll();
-  
+
   //Consulr el id del usuario logueado
   $sqlDocumento = "SELECT documentoIdentidad FROM tblusuario WHERE correoUsuario=:correo";
   $consultaDocumento = $pdo->prepare($sqlDocumento);
-  $consultaDocumento->bindValue(":correo",$_SESSION['correo']);
+  $consultaDocumento->bindValue(":correo", $_SESSION['correo']);
   $consultaDocumento->execute();
   $resultadoDocumento = $consultaDocumento->fetch();
-  ?>
+
+  //Mostrar productos agregados
+  $sqlProducto = "SELECT PR.idProducto,PR.nombreProducto,PR.descripcionProducto,PR.precioProducto,PR.imagenProducto,CA.nombreCategoria 
+  FROM tblproducto as PR 
+  INNER JOIN tblcategoria as CA ON CA.idCategoria=PR.categoriaProducto";
+  $consultaProducto = $pdo->prepare($sqlProducto);
+  $consultaProducto->execute();
+  $resultadoProducto = $consultaProducto->fetchAll();
+?>
   <!DOCTYPE html>
   <html lang="en">
 
@@ -198,6 +206,45 @@ if (isset($_SESSION['correo'])) {
               </div>
             </div>
             <!-- Fin formulario y tabla -->
+            <br><br>
+            <!-- Tabla de productos -->
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Productos Registrados</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Actualizar</th>
+                        <th>Eliminar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($resultadoProducto as $datosProducto) { ?>
+                        <tr>
+                          <td><?php echo $datosProducto['imagenProducto'] ?></td>
+                          <td><?php echo $datosProducto['nombreProducto'] ?></td>
+                          <td><?php echo $datosProducto['descripcionProducto'] ?></td>
+                          <td><?php echo $datosProducto['precioProducto'] ?></td>
+                          <td><?php echo $datosProducto['nombreCategoria'] ?></td>
+                          <td><a href="actualizar?id=<?php echo $datosProducto['idProducto'] ?>" class="btn btn-success">Actualizar</a></td>
+                          <td><a href="eliminar?id=<?php echo $datosProducto['idProducto'] ?>" class="btn btn-danger">Eliminar</a></td>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Fin tabla de productos -->
           </div>
           <!-- /.container-fluid -->
         </div>
@@ -244,7 +291,6 @@ if (isset($_SESSION['correo'])) {
         </div>
       </div>
     </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -256,11 +302,12 @@ if (isset($_SESSION['correo'])) {
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+
   </body>
 
   </html>
