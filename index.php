@@ -64,6 +64,7 @@ $resultadoCategoria = $consultaCategoria->fetchAll();
           <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
           <li><a class="nav-link scrollto" href="#about">¿Qué es?</a></li>
           <li><a class="nav-link scrollto" href="#menu">Productos</a></li>
+          <li><a class="nav-link scrollto" target="_blank" href="docs/Catlogo_Hinode_Colombia_Ciclo_2_2022.pdf">Catálogo</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

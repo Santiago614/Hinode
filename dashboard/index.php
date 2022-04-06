@@ -64,7 +64,8 @@ if (isset($_SESSION['correo'])) {
         <li class="nav-item active">
           <a class="nav-link" href="index.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Dashboard</span>
+          </a>
         </li>
       </ul>
       <!-- End of Sidebar -->
@@ -107,7 +108,7 @@ if (isset($_SESSION['correo'])) {
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultadoDocumento['nombresUsuario']." ".$resultadoDocumento['apellidosUsuario']; ?></span>
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultadoDocumento['nombresUsuario'] . " " . $resultadoDocumento['apellidosUsuario']; ?></span>
                   <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
                 </a>
                 <!-- Dropdown - User Information -->
@@ -216,7 +217,7 @@ if (isset($_SESSION['correo'])) {
               $consultaMostrarProducto = $pdo->prepare($sqlMostrarProducto);
               $consultaMostrarProducto->bindValue(":idProducto", $idProducto);
               $consultaMostrarProducto->execute();
-              $resultadoMostrarProducto=$consultaMostrarProducto->fetch();
+              $resultadoMostrarProducto = $consultaMostrarProducto->fetch();
             ?>
               <div class="cont-form-crearPubli">
                 <div class="card">
@@ -302,7 +303,7 @@ if (isset($_SESSION['correo'])) {
                     <tbody>
                       <?php foreach ($resultadoProducto as $datosProducto) { ?>
                         <tr>
-                          <td><img src="../assets/img/<?php echo $datosProducto['imagenProducto'] ?>" alt="" width="80px"></td>
+                          <td><img src="../assets/img/<?php echo $datosProducto['imagenProducto'] ?>" alt="" width="90px"></td>
                           <td><?php echo $datosProducto['nombreProducto'] ?></td>
                           <td><?php echo $datosProducto['descripcionProducto'] ?></td>
                           <td><?php echo number_format($datosProducto['precioProducto'], 0, '', '.') ?></td>
